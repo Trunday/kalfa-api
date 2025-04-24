@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const sequelize = require('./config/database'); // Sequelize bağlantısı
 const Calisan = require('./models/calisan'); // Çalışan modeli
 const Is = require('./models/isler'); // İş modelini içe aktarıyoruz
+const Avans = require('./models/avanslar'); // Avans modelini içe aktarıyoruz
+const Odeme = require('./models/odeme'); // Ödeme modelini içe aktarıyoruz
 
 const app = express();
 const port = 3000;
@@ -168,6 +170,120 @@ app.delete('/isler/:id', async (req, res) => {
         }
     } catch (error) {
         console.error('İş silinirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.get('/avanslar', async (req, res) => {
+    try {
+        const avanslar = await Avans.findAll(); // Tüm avansları getir
+        res.status(200).json(avanslar); // JSON formatında gönder
+    } catch (error) {
+        console.error('Avanslar getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.post('/avanslar', async (req, res) => {
+    const { calisan_id, tarih, miktar } = req.body;
+
+    try {
+        const yeniAvans = await Avans.create({
+            calisan_id,
+            tarih,
+            miktar,
+        });
+
+        res.status(201).json(yeniAvans); // 201 Created ile yanıt dön
+    } catch (error) {
+        console.error('Yeni avans eklenirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.get('/avanslar/:id', async (req, res) => {
+    try {
+        const avans = await Avans.findByPk(req.params.id); // ID'ye göre avansı bul
+
+        if (avans) {
+            res.status(200).json(avans); // JSON formatında dön
+        } else {
+            res.status(404).json({ message: 'Avans bulunamadı.' });
+        }
+    } catch (error) {
+        console.error('Avans getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.delete('/avanslar/:id', async (req, res) => {
+    try {
+        const silinenSatirSayisi = await Avans.destroy({ where: { id: req.params.id } });
+
+        if (silinenSatirSayisi) {
+            res.status(204).send(); // 204 No Content dön
+        } else {
+            res.status(404).json({ message: 'Avans bulunamadı.' });
+        }
+    } catch (error) {
+        console.error('Avans silinirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.get('/odeme', async (req, res) => {
+    try {
+        const odemeler = await Odeme.findAll(); // Tüm ödemeleri getir
+        res.status(200).json(odemeler); // JSON formatında gönder
+    } catch (error) {
+        console.error('Ödemeler getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.post('/odeme', async (req, res) => {
+    const { calisan_id, tarih, miktar } = req.body;
+
+    try {
+        const yeniOdeme = await Odeme.create({
+            calisan_id,
+            tarih,
+            miktar,
+        });
+
+        res.status(201).json(yeniOdeme); // 201 Created ile yanıt dön
+    } catch (error) {
+        console.error('Yeni ödeme eklenirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.get('/odeme/:id', async (req, res) => {
+    try {
+        const odeme = await Odeme.findByPk(req.params.id); // ID'ye göre ödemeyi bul
+
+        if (odeme) {
+            res.status(200).json(odeme); // JSON formatında dön
+        } else {
+            res.status(404).json({ message: 'Ödeme bulunamadı.' });
+        }
+    } catch (error) {
+        console.error('Ödeme getirilirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sunucu hatası.' });
+    }
+});
+
+app.delete('/odeme/:id', async (req, res) => {
+    try {
+        const silinenSatirSayisi = await Odeme.destroy({ where: { id: req.params.id } });
+
+        if (silinenSatirSayisi) {
+            res.status(204).send(); // 204 No Content dön
+        } else {
+            res.status(404).json({ message: 'Ödeme bulunamadı.' });
+        }
+    } catch (error) {
+        console.error('Ödeme silinirken hata oluştu:', error);
         res.status(500).json({ message: 'Sunucu hatası.' });
     }
 });
