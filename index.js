@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 // Veritabanı senkronizasyonu
 sequelize.sync({ alter: true })
-    .then(() => console.log('Modeller senkronize edildi'))
+    .then(() => console.log('Tüm modeller senkronize edildi.'))
     .catch((err) => console.error('Senkranizasyon hatası:', err));
 
 // Basit bir test endpoint'i
