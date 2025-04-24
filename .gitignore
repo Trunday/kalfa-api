@@ -1,0 +1,29 @@
+## Node.js projeleri için genel gitignore
+node_modules/          
+# Bağımlılık klasörü
+.env                   
+# Çevresel değişken dosyaları (şifreler ve API anahtarları gibi hassas bilgiler)
+*.log                  
+# Log dosyaları
+npm-debug.log*         
+# npm hata logları
+yarn-debug.log*        
+# yarn hata logları
+yarn-error.log*        
+# yarn hata logları
+
+## IDE ve editör ayarları
+.DS_Store              
+# macOS sistem dosyaları
+Thumbs.db              
+# Windows sistem dosyaları
+.vscode/               
+# Visual Studio Code ayar klasörü
+.idea/                 
+# IntelliJ IDEA klasörü
+
+## Üretim ve geçici dosyalar
+dist/                  
+# Derlenmiş dosyalar (varsa)
+coverage/              
+# Test kapsamı raporları (varsa)
