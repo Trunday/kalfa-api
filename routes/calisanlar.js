@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Calisan = require('../models/calisan');
+const authenticateToken = require('../middleware/auth');
 
 // Çalışanları listeleme
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try {
         const calisanlar = await Calisan.findAll();
         res.status(200).json(calisanlar);

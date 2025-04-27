@@ -7,6 +7,7 @@ const calisanlarRoutes = require('./routes/calisanlar');
 const islerRoutes = require('./routes/isler');
 const avanslarRoutes = require('./routes/avanslar');
 const odemeRoutes = require('./routes/odeme');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,7 @@ app.use('/calisanlar', calisanlarRoutes);
 app.use('/isler', islerRoutes);
 app.use('/avanslar', avanslarRoutes);
 app.use('/odeme', odemeRoutes);
+app.use('/auth', authRoutes);
 
 // Basit bir test endpoint'i
 app.get('/', (req, res) => {
