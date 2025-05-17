@@ -1,5 +1,5 @@
 ## Node.js projeleri için genel gitignore
-node_modules/          
+node_modules/      
 # Bağımlılık klasörü
 .env                   
 # Çevresel değişken dosyaları (şifreler ve API anahtarları gibi hassas bilgiler)
