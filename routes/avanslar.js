@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Avans = require('../models/avanslar');
+const authenticateToken = require('../middleware/auth');
+
+router.use(authenticateToken);
 
 // Swagger schema for Avans
 /**

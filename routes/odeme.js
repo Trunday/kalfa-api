@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Odeme = require('../models/odeme');
+const authenticateToken = require('../middleware/auth');
+
+router.use(authenticateToken);
 
 // Swagger schema for Ödeme
 /**
