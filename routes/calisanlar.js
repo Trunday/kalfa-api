@@ -31,6 +31,12 @@ router.use(authenticateToken);
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  * /calisanlar:
  *   get:
  *     summary: Tüm çalışanları listeler
