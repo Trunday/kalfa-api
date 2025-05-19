@@ -2,7 +2,46 @@ const express = require('express');
 const router = express.Router();
 const Odeme = require('../models/odeme');
 
-// Ödemeleri listeleme
+// Swagger schema for Ödeme
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Odeme:
+ *       type: object
+ *       required:
+ *         - tarih
+ *         - miktar
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tarih:
+ *           type: string
+ *           format: date
+ *         miktar:
+ *           type: number
+ *         calisan_id:
+ *           type: integer
+ */
+
+/**
+ * @swagger
+ * /odeme:
+ *   get:
+ *     summary: Ödemeleri listeleme
+ *     tags: [Ödemeler]
+ *     responses:
+ *       200:
+ *         description: Ödeme listesi başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Odeme'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/', async (req, res) => {
     try {
         const odemeler = await Odeme.findAll();
@@ -12,7 +51,39 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Yeni ödeme ekleme
+/**
+ * @swagger
+ * /odeme:
+ *   post:
+ *     summary: Yeni ödeme ekleme
+ *     tags: [Ödemeler]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tarih
+ *               - miktar
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Yeni ödeme başarıyla oluşturuldu.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Odeme'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.post('/', async (req, res) => {
     const { tarih, miktar, calisan_id } = req.body;
     try {
@@ -23,7 +94,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Belirli bir ödemeyi getirme
+/**
+ * @swagger
+ * /odeme/{id}:
+ *   get:
+ *     summary: Belirli bir ödemeyi getirme
+ *     tags: [Ödemeler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Ödemenin ID'si
+ *     responses:
+ *       200:
+ *         description: Ödeme detayları başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Odeme'
+ *       404:
+ *         description: Ödeme bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/:id', async (req, res) => {
     try {
         const odeme = await Odeme.findByPk(req.params.id);
@@ -37,7 +132,45 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Ödeme güncelleme
+/**
+ * @swagger
+ * /odeme/{id}:
+ *   put:
+ *     summary: Ödeme güncelleme
+ *     tags: [Ödemeler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Güncellenecek ödemenin ID'si
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Ödeme başarıyla güncellendi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Odeme'
+ *       404:
+ *         description: Ödeme bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.put('/:id', async (req, res) => {
     const { tarih, miktar, calisan_id } = req.body;
     try {
@@ -54,7 +187,27 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Ödeme silme
+/**
+ * @swagger
+ * /odeme/{id}:
+ *   delete:
+ *     summary: Ödeme silme
+ *     tags: [Ödemeler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Silinecek ödemenin ID'si
+ *     responses:
+ *       204:
+ *         description: Ödeme başarıyla silindi.
+ *       404:
+ *         description: Ödeme bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const sonuc = await Odeme.destroy({ where: { id: req.params.id } });

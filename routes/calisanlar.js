@@ -3,6 +3,8 @@ const router = express.Router();
 const Calisan = require('../models/calisan');
 const authenticateToken = require('../middleware/auth');
 
+router.use(authenticateToken);
+
 /**
  * @swagger
  * components:
@@ -47,7 +49,7 @@ const authenticateToken = require('../middleware/auth');
  *       500:
  *         description: Sunucu hatası
  */
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const calisanlar = await Calisan.findAll();
         res.status(200).json(calisanlar);

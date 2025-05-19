@@ -2,7 +2,46 @@ const express = require('express');
 const router = express.Router();
 const Avans = require('../models/avanslar');
 
-// Avansları listeleme
+// Swagger schema for Avans
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Avans:
+ *       type: object
+ *       required:
+ *         - tarih
+ *         - miktar
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tarih:
+ *           type: string
+ *           format: date
+ *         miktar:
+ *           type: number
+ *         calisan_id:
+ *           type: integer
+ */
+
+/**
+ * @swagger
+ * /avanslar:
+ *   get:
+ *     summary: Avansları listeleme
+ *     tags: [Avanslar]
+ *     responses:
+ *       200:
+ *         description: Avans listesi başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Avans'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/', async (req, res) => {
     try {
         const avanslar = await Avans.findAll();
@@ -12,7 +51,39 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Yeni avans ekleme
+/**
+ * @swagger
+ * /avanslar:
+ *   post:
+ *     summary: Yeni avans ekleme
+ *     tags: [Avanslar]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tarih
+ *               - miktar
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Yeni avans başarıyla oluşturuldu.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Avans'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.post('/', async (req, res) => {
     const { tarih, miktar, calisan_id } = req.body;
     try {
@@ -23,7 +94,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Belirli bir avansı getirme
+/**
+ * @swagger
+ * /avanslar/{id}:
+ *   get:
+ *     summary: Belirli bir avansı getirme
+ *     tags: [Avanslar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Avansın ID'si
+ *     responses:
+ *       200:
+ *         description: Avans detayları başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Avans'
+ *       404:
+ *         description: Avans bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/:id', async (req, res) => {
     try {
         const avans = await Avans.findByPk(req.params.id);
@@ -37,7 +132,45 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Avans güncelleme
+/**
+ * @swagger
+ * /avanslar/{id}:
+ *   put:
+ *     summary: Avans güncelleme
+ *     tags: [Avanslar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Güncellenecek avansın ID'si
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Avans başarıyla güncellendi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Avans'
+ *       404:
+ *         description: Avans bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.put('/:id', async (req, res) => {
     const { tarih, miktar, calisan_id } = req.body;
     try {
@@ -54,7 +187,27 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Avans silme
+/**
+ * @swagger
+ * /avanslar/{id}:
+ *   delete:
+ *     summary: Avans silme
+ *     tags: [Avanslar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Silinecek avansın ID'si
+ *     responses:
+ *       204:
+ *         description: Avans başarıyla silindi.
+ *       404:
+ *         description: Avans bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const sonuc = await Avans.destroy({ where: { id: req.params.id } });

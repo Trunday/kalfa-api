@@ -4,7 +4,67 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = express.Router();
 
-// Kullanıcı kaydı
+// Swagger schemas for Auth
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RegisterUser:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *       properties:
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
+ *     LoginUser:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *       properties:
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
+ *     AuthResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *         token:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Kullanıcı kaydı oluşturur
+ *     tags: [Kimlik Doğrulama]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterUser'
+ *     responses:
+ *       201:
+ *         description: Kullanıcı başarıyla oluşturuldu.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -16,7 +76,32 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Kullanıcı girişi
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Kullanıcı girişi
+ *     tags: [Kimlik Doğrulama]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginUser'
+ *     responses:
+ *       200:
+ *         description: Giriş başarılı.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       404:
+ *         description: Kullanıcı bulunamadı.
+ *       401:
+ *         description: Geçersiz şifre.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {

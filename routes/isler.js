@@ -2,7 +2,55 @@ const express = require('express');
 const router = express.Router();
 const Is = require('../models/isler');
 
-// İşleri listeleme
+// Swagger schema for İş
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Is:
+ *       type: object
+ *       required:
+ *         - tarih
+ *         - miktar
+ *         - birim
+ *         - birim_ucret
+ *         - calisan_id
+ *       properties:
+ *         id:
+ *           type: integer
+ *         tarih:
+ *           type: string
+ *           format: date
+ *         miktar:
+ *           type: number
+ *         birim:
+ *           type: string
+ *         birim_ucret:
+ *           type: number
+ *         toplam_ucret:
+ *           type: number
+ *         calisan_id:
+ *           type: integer
+ */
+
+/**
+ * @swagger
+ * /isler:
+ *   get:
+ *     summary: İşleri listeleme
+ *     tags: [İşler]
+ *     responses:
+ *       200:
+ *         description: İş listesi başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Is'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/', async (req, res) => {
     try {
         const isler = await Is.findAll();
@@ -12,7 +60,48 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Yeni iş ekleme
+/**
+ * @swagger
+ * /isler:
+ *   post:
+ *     summary: Yeni iş ekleme
+ *     tags: [İşler]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tarih
+ *               - miktar
+ *               - birim
+ *               - birim_ucret
+ *               - calisan_id
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               birim:
+ *                 type: string
+ *               birim_ucret:
+ *                 type: number
+ *               toplam_ucret:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Yeni iş başarıyla oluşturuldu.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Is'
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.post('/', async (req, res) => {
     const { tarih, miktar, birim, birim_ucret, toplam_ucret, calisan_id } = req.body;
     try {
@@ -23,7 +112,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Belirli bir işi getirme
+/**
+ * @swagger
+ * /isler/{id}:
+ *   get:
+ *     summary: Belirli bir işi getirme
+ *     tags: [İşler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: İşin ID'si
+ *     responses:
+ *       200:
+ *         description: İş detayları başarıyla getirildi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Is'
+ *       404:
+ *         description: İş bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.get('/:id', async (req, res) => {
     try {
         const is = await Is.findByPk(req.params.id);
@@ -37,7 +150,51 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// İş güncelleme
+/**
+ * @swagger
+ * /isler/{id}:
+ *   put:
+ *     summary: İş güncelleme
+ *     tags: [İşler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Güncellenecek işin ID'si
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tarih:
+ *                 type: string
+ *                 format: date
+ *               miktar:
+ *                 type: number
+ *               birim:
+ *                 type: string
+ *               birim_ucret:
+ *                 type: number
+ *               toplam_ucret:
+ *                 type: number
+ *               calisan_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: İş başarıyla güncellendi.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Is'
+ *       404:
+ *         description: İş bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.put('/:id', async (req, res) => {
     const { tarih, miktar, birim, birim_ucret, toplam_ucret, calisan_id } = req.body;
     try {
@@ -54,7 +211,27 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// İş silme
+/**
+ * @swagger
+ * /isler/{id}:
+ *   delete:
+ *     summary: İş silme
+ *     tags: [İşler]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Silinecek işin ID'si
+ *     responses:
+ *       204:
+ *         description: İş başarıyla silindi.
+ *       404:
+ *         description: İş bulunamadı.
+ *       500:
+ *         description: Sunucu hatası.
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const sonuc = await Is.destroy({ where: { id: req.params.id } });
