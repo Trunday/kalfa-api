@@ -5,8 +5,9 @@ const authenticateToken = (req, res, next) => {
     if (!token) {
         return res.status(401).json({ message: 'Erişim reddedildi. Token eksik.' });
     }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    // Bearer token formatını ayıklama
+    const bearerToken = token.split(' ')[1];
+    jwt.verify(bearerToken, process.env.JWT_SECRET, (err, user) => {
         if (err) {
             return res.status(403).json({ message: 'Geçersiz token.' });
         }
