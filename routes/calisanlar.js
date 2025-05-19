@@ -3,7 +3,50 @@ const router = express.Router();
 const Calisan = require('../models/calisan');
 const authenticateToken = require('../middleware/auth');
 
-// Çalışanları listeleme
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Calisan:
+ *       type: object
+ *       required:
+ *         - ad
+ *         - soyad
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Çalışan ID'si
+ *         ad:
+ *           type: string
+ *           description: Çalışanın adı
+ *         soyad:
+ *           type: string
+ *           description: Çalışanın soyadı
+ *         telefon:
+ *           type: string
+ *           description: Çalışanın telefon numarası
+ */
+
+/**
+ * @swagger
+ * /calisanlar:
+ *   get:
+ *     summary: Tüm çalışanları listeler
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Çalışanlar]
+ *     responses:
+ *       200:
+ *         description: Çalışan listesi başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Calisan'
+ *       500:
+ *         description: Sunucu hatası
+ */
 router.get('/', authenticateToken, async (req, res) => {
     try {
         const calisanlar = await Calisan.findAll();
@@ -13,7 +56,38 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
-// Yeni çalışan ekleme
+/**
+ * @swagger
+ * /calisanlar:
+ *   post:
+ *     summary: Yeni çalışan ekler
+ *     tags: [Çalışanlar]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ad
+ *               - soyad
+ *             properties:
+ *               ad:
+ *                 type: string
+ *               soyad:
+ *                 type: string
+ *               telefon:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Çalışan başarıyla oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calisan'
+ *       500:
+ *         description: Sunucu hatası
+ */
 router.post('/', async (req, res) => {
     const { ad, soyad, telefon } = req.body;
     try {
@@ -24,7 +98,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Belirli bir çalışanın detaylarını getirme
+/**
+ * @swagger
+ * /calisanlar/{id}:
+ *   get:
+ *     summary: Belirli bir çalışanın detaylarını getirir
+ *     tags: [Çalışanlar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Çalışan ID'si
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Çalışan detayları başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calisan'
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
 router.get('/:id', async (req, res) => {
     try {
         const calisan = await Calisan.findByPk(req.params.id);
@@ -38,7 +136,44 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Çalışan güncelleme
+/**
+ * @swagger
+ * /calisanlar/{id}:
+ *   put:
+ *     summary: Çalışan bilgilerini günceller
+ *     tags: [Çalışanlar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Çalışan ID'si
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ad:
+ *                 type: string
+ *               soyad:
+ *                 type: string
+ *               telefon:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Çalışan bilgileri başarıyla güncellendi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Calisan'
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
 router.put('/:id', async (req, res) => {
     const { ad, soyad, telefon } = req.body;
     try {
@@ -57,7 +192,27 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Çalışan silme
+/**
+ * @swagger
+ * /calisanlar/{id}:
+ *   delete:
+ *     summary: Çalışanı siler
+ *     tags: [Çalışanlar]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Çalışan ID'si
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Çalışan başarıyla silindi
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const sonuc = await Calisan.destroy({ where: { id: req.params.id } });

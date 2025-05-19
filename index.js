@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 
 // Route dosyalarını içe aktarın
 const calisanlarRoutes = require('./routes/calisanlar');
@@ -26,6 +28,9 @@ app.use('/isler', islerRoutes);
 app.use('/avanslar', avanslarRoutes);
 app.use('/odeme', odemeRoutes);
 app.use('/auth', authRoutes);
+
+// Swagger UI'ı ekle
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Basit bir test endpoint'i
 app.get('/', (req, res) => {
