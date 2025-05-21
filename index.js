@@ -5,9 +5,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
 
 // Route dosyalarını içe aktarın
-const calisanlarRoutes = require('./routes/calisanlar');
 const islerRoutes = require('./routes/isler');
-const avanslarRoutes = require('./routes/avanslar');
 const odemeRoutes = require('./routes/odeme');
 const authRoutes = require('./routes/auth');
 
@@ -23,9 +21,7 @@ sequelize.sync({ alter: true })
     .catch((err) => console.error('Senkranizasyon hatası:', err));
 
 // Route'ları kullanın
-app.use('/calisanlar', calisanlarRoutes);
 app.use('/isler', islerRoutes);
-app.use('/avanslar', avanslarRoutes);
 app.use('/odeme', odemeRoutes);
 app.use('/auth', authRoutes);
 

@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Calisan = require('./calisan'); // Çalışan modelini içe aktar
+const User = require('./user'); // User modelini içe aktar
 
 const Is = sequelize.define('Is', {
     tarih: {
@@ -40,6 +40,6 @@ const Is = sequelize.define('Is', {
     timestamps: false, // createdAt ve updatedAt eklenmesin
 });
 
-// Bir iş bir çalışana atanır
-Is.belongsTo(Calisan, { foreignKey: 'calisan_id' });
+// Bir iş bir kullanıcıya atanır
+Is.belongsTo(User, { foreignKey: 'user_id' });
 module.exports = Is;
