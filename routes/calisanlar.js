@@ -32,6 +32,108 @@ router.use(authenticateToken);
  *           type: boolean
  */
 
+/**
+ * @swagger
+ * /calisanlar:
+ *   get:
+ *     summary: Tüm çalışanları listele
+ *     tags: [Çalışanlar]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Çalışan listesi başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Calisan'
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   post:
+ *     summary: Yeni çalışan ekle
+ *     tags: [Çalışanlar]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Calisan'
+ *     responses:
+ *       201:
+ *         description: Çalışan başarıyla oluşturuldu
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ * /calisanlar/{id}:
+ *   get:
+ *     summary: Belirli bir çalışanı getir
+ *     tags: [Çalışanlar]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Çalışan başarıyla getirildi
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   put:
+ *     summary: Çalışan bilgilerini güncelle
+ *     tags: [Çalışanlar]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Calisan'
+ *     responses:
+ *       200:
+ *         description: Çalışan başarıyla güncellendi
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   delete:
+ *     summary: Çalışanı pasif duruma getir
+ *     tags: [Çalışanlar]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Çalışan başarıyla pasif duruma getirildi
+ *       404:
+ *         description: Çalışan bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
 router.get('/', async (req, res) => {
     try {
         const calisanlar = await User.findAll({

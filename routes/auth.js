@@ -64,6 +64,97 @@ const router = express.Router();
  *               type: string
  */
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Yeni kullanıcı kaydı
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterUser'
+ *     responses:
+ *       201:
+ *         description: Kullanıcı başarıyla oluşturuldu
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Geçersiz bilgiler
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ * /auth/login:
+ *   post:
+ *     summary: Kullanıcı girişi
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginUser'
+ *     responses:
+ *       200:
+ *         description: Giriş başarılı
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       401:
+ *         description: Geçersiz kimlik bilgileri
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Şifre sıfırlama talebi
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Şifre sıfırlama talimatları gönderildi
+ *       404:
+ *         description: Kullanıcı bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ * /auth/profile:
+ *   get:
+ *     summary: Kullanıcı profil bilgilerini getir
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Profil bilgileri başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegisterUser'
+ *       401:
+ *         description: Yetkisiz erişim
+ *       404:
+ *         description: Kullanıcı bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
 router.post('/register', async (req, res) => {
     const { 
         username, 

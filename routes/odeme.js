@@ -36,6 +36,108 @@ router.use(authenticateToken);
  *           type: integer
  */
 
+/**
+ * @swagger
+ * /odeme:
+ *   get:
+ *     summary: Tüm ödemeleri listele
+ *     tags: [Ödemeler]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Ödeme listesi başarıyla getirildi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Odeme'
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   post:
+ *     summary: Yeni ödeme ekle
+ *     tags: [Ödemeler]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Odeme'
+ *     responses:
+ *       201:
+ *         description: Ödeme başarıyla oluşturuldu
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ * /odeme/{id}:
+ *   get:
+ *     summary: Belirli bir ödemeyi getir
+ *     tags: [Ödemeler]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Ödeme başarıyla getirildi
+ *       404:
+ *         description: Ödeme bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   put:
+ *     summary: Ödeme bilgilerini güncelle
+ *     tags: [Ödemeler]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Odeme'
+ *     responses:
+ *       200:
+ *         description: Ödeme başarıyla güncellendi
+ *       404:
+ *         description: Ödeme bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ * 
+ *   delete:
+ *     summary: Ödeme kaydını sil
+ *     tags: [Ödemeler]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       204:
+ *         description: Ödeme başarıyla silindi
+ *       404:
+ *         description: Ödeme bulunamadı
+ *       500:
+ *         description: Sunucu hatası
+ */
+
 router.get('/', async (req, res) => {
     try {
         const odemeler = await Odeme.findAll({
