@@ -23,6 +23,18 @@ const Is = sequelize.define('Is', {
         type: DataTypes.FLOAT,
         allowNull: true, // Otomatik hesaplanabilir
     },
+    aciklama: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    durum: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    proje_adi: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     tableName: 'isler', // Tablo adı
     timestamps: false, // createdAt ve updatedAt eklenmesin

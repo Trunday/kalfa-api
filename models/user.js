@@ -11,6 +11,31 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+    },
+    rol: {
+        type: DataTypes.ENUM("admin", "user", "manager","kalfa","çalışan"), 
+        allowNull: true,
+    },
+    notlar: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    adres : {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    dogum_tarihi: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    aktif: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
 }, {
     tableName: 'users',
     timestamps: true,
