@@ -8,6 +8,7 @@ const swaggerSpecs = require('./config/swagger');
 const islerRoutes = require('./routes/isler');
 const odemeRoutes = require('./routes/odeme');
 const authRoutes = require('./routes/auth');
+const calisanlarRoutes = require('./routes/calisanlar');
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,7 @@ sequelize.sync({ alter: true })
 app.use('/isler', islerRoutes);
 app.use('/odeme', odemeRoutes);
 app.use('/auth', authRoutes);
+app.use('/calisanlar', calisanlarRoutes);
 
 // Swagger UI'ı ekle
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
