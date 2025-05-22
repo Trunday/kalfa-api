@@ -141,12 +141,20 @@ router.use(authenticateToken, express.json());
 router.get("/", async (req, res) => {
   try {
     const odemeler = await Odeme.findAll({
-      include: ['User'],
+      include: ["User"],
       //TODO Burada user_id'yi kontrol etmemiz gerekiyor. Şu an tüm ödemeleri getiriyor
       //TODO Mantık hataları var galiba burada biraz daha durmam gerekecek gibi
-
     });
-    res.status(200).json(odemeler);
+    // Kullanıcı şifrelerini manuel olarak kaldır
+    const temizVeri = odemeler.map((odeme) => {
+      const odemeJSON = odeme.toJSON();
+      if (odemeJSON.User) {
+        delete odemeJSON.User.password;
+      }
+      return odemeJSON;
+    });
+
+    res.status(200).json(temizVeri);
   } catch (error) {
     res.status(500).json({ message: "Sunucu hatası.", error });
   }
