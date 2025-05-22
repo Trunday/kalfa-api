@@ -3,7 +3,7 @@ const router = express.Router();
 const Is = require('../models/isler');
 const authenticateToken = require('../middleware/auth');
 
-router.use(authenticateToken);
+router.use(authenticateToken, express.json());
 
 // Swagger schema for İş
 /**
@@ -24,8 +24,6 @@ router.use(authenticateToken);
  *         - birim_ucret
  *         - calisan_id
  *       properties:
- *         id:
- *           type: integer
  *         tarih:
  *           type: string
  *           format: date
