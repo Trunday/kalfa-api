@@ -141,16 +141,10 @@ router.use(authenticateToken, express.json());
 router.get("/", async (req, res) => {
   try {
     const odemeler = await Odeme.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ["id", "username", "email", "rol"],
-        },
-      ],
+      include: ['User'],
+      //TODO Burada user_id'yi kontrol etmemiz gerekiyor. Şu an tüm ödemeleri getiriyor
       //TODO Mantık hataları var galiba burada biraz daha durmam gerekecek gibi
-      //             where: {
-      //                user_id: req.user.id // Sadece giriş yapan kullanıcının ödemelerini getir
-      //            }
+
     });
     res.status(200).json(odemeler);
   } catch (error) {
